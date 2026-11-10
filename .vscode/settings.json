@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Haunted-Motel.slnx"
+    "dotnet.defaultSolution": "Spooky Motel Escape.slnx"
 }

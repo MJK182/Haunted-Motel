@@ -3,43 +3,38 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    public float walkSpeed = 3.5f;
-    public float runSpeed = 6f;
-    public float mouseSensitivity = 2f;
-    public float gravity = -20f;
-    public Transform cameraTransform; // Pelaajan lapsena oleva kamera
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private float sprintSpeed = 8f;
+    [SerializeField] private float jumpHeight = 1.2f;
+    [SerializeField] private float gravity = -20f;
 
-    CharacterController cc;
-    float pitch;
-    float velocityY;
+    private CharacterController controller;
+    private Vector3 velocity;
 
-    void Start()
+    void Awake()
     {
-        cc = GetComponent<CharacterController>();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        controller = GetComponent<CharacterController>();
     }
 
     void Update()
     {
-        if (GameManager.Instance != null && GameManager.Instance.GameEnded) return;
+        // Pysy maassa
+        if (controller.isGrounded && velocity.y < 0)
+            velocity.y = -2f;
 
-        // Katselu
-        float mx = Input.GetAxis("Mouse X") * mouseSensitivity;
-        float my = Input.GetAxis("Mouse Y") * mouseSensitivity;
-        transform.Rotate(0f, mx, 0f);
-        pitch = Mathf.Clamp(pitch - my, -80f, 80f);
-        cameraTransform.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
 
-        // Liikkuminen (WASD, Shift = juoksu)
-        Vector3 input = transform.right * Input.GetAxis("Horizontal")
-                      + transform.forward * Input.GetAxis("Vertical");
-        float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : speed;
+        Vector3 move = transform.right * x + transform.forward * z;
+        controller.Move(move * currentSpeed * Time.deltaTime);
 
-        if (cc.isGrounded && velocityY < 0f) velocityY = -2f;
-        velocityY += gravity * Time.deltaTime;
+        // Hyppy
+        if (Input.GetButtonDown("Jump") && controller.isGrounded)
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
 
-        cc.Move((Vector3.ClampMagnitude(input, 1f) * speed + Vector3.up * velocityY) * Time.deltaTime);
+        // Painovoima
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
     }
 }
-
