@@ -4,7 +4,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class ZombieAnimator : MonoBehaviour
 {
-    public Animator animator;     // jos tyhjä, haetaan lapsesta
+    public Animator animator;     // jos tyhja, haetaan lapsesta
 
     NavMeshAgent agent;
     ZombieAI ai;
