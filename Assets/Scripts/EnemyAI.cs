@@ -114,20 +114,40 @@ public class EnemyAI : MonoBehaviour
         agent.SetDestination(waypoints[waypointIndex].position);
     }
 
-    private bool CanSeePlayer()
+  private bool CanSeePlayer()
+{
+    Vector3 targetPoint = player.position + Vector3.up * 0.8f;
+    Vector3 toPlayer = targetPoint - eyes.position;
+    float distance = toPlayer.magnitude;
+
+    Debug.DrawRay(eyes.position, eyes.forward * sightRange, Color.green);
+    Debug.DrawRay(eyes.position, toPlayer, Color.red);
+
+    if (distance > sightRange)
     {
-        Vector3 targetPoint = player.position + Vector3.up * 0.8f; // suunnilleen pelaajan rinnan korkeus
-        Vector3 toPlayer = targetPoint - eyes.position;
-
-        if (toPlayer.magnitude > sightRange) return false;
-        if (Vector3.Angle(eyes.forward, toPlayer) > fieldOfView * 0.5f) return false;
-
-        // Onko seinä välissä?
-        if (Physics.Raycast(eyes.position, toPlayer.normalized, toPlayer.magnitude, obstacleMask))
-            return false;
-
-        return true;
+        Debug.Log($"Liian kaukana: {distance:F1} m");
+        return false;
     }
+
+    float angle = Vector3.Angle(eyes.forward, toPlayer);
+    if (angle > fieldOfView * 0.5f)
+    {
+        Debug.Log($"Pelaaja näkökentän ulkopuolella: kulma {angle:F0}°");
+        return false;
+    }
+
+    if (Physics.Raycast(eyes.position, toPlayer.normalized, out RaycastHit hit,
+                        distance + 0.5f, ~0, QueryTriggerInteraction.Ignore))
+    {
+        bool isPlayer = hit.transform == player || hit.transform.IsChildOf(player);
+        if (!isPlayer)
+            Debug.Log($"Näkyvyyden estää: {hit.collider.name}");
+        return isPlayer;
+    }
+
+    Debug.Log("Raycast ei osunut mihinkään (pelaajalla ei ehkä ole collideria)");
+    return false;
+}
 
     private void CaughtPlayer()
     {
