@@ -5763,6 +5763,8 @@ GameObject:
   - component: {fileID: 1665530920}
   - component: {fileID: 1665530925}
   - component: {fileID: 1665530926}
+  - component: {fileID: 1665530928}
+  - component: {fileID: 1665530927}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5920,6 +5922,36 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1665530927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665530919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85a7574e929aa2d49aec1116fa783946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactor
+  cam: {fileID: 0}
+  range: 3
+  key: 101
+  mask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &1665530928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665530919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ecd230b77bc97e4cb3a10a9b20a21f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Inventory
 --- !u!1 &1709788454
 GameObject:
   m_ObjectHideFlags: 0
