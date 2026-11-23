@@ -8,16 +8,22 @@ public class EscapeExit : MonoBehaviour, IInteractable
 {
     public string exitName = "Pääovi";
     public string[] requiredItems;
-    public bool requiresPower = true;           // vaatii generaattorin käynnissä
+    public bool requiresPower = true;
     public bool consumeItems = false;
     public string lockedHint = "Ovi on lukossa.";
     public string escapeText = "Pääsit pakoon!";
-    public string endSceneName = "";            // tyhjä = lataa nykyinen scene uudelleen
+    public EndingSequence ending;               // jos asetettu (tai samalla objektilla), soitetaan oma loppuelokuva
+    public string endSceneName = "";            // käytössä vain, jos ending puuttuu
     public float endDelay = 4f;
-    public UnityEvent onEscape;                 // esim. elokuva tai ääni
+    public UnityEvent onEscape;
 
     bool done;
     public string Prompt => exitName;
+
+    void Awake()
+    {
+        if (ending == null) ending = GetComponent<EndingSequence>();
+    }
 
     public void Interact(Inventory inv)
     {
@@ -43,12 +49,18 @@ public class EscapeExit : MonoBehaviour, IInteractable
 
     IEnumerator Escape(Inventory inv)
     {
+        onEscape?.Invoke();
+
+        if (ending != null)
+        {
+            ending.Play(inv);
+            yield break;
+        }
+
         var pc = inv.GetComponent<PlayerController>();
         if (pc) pc.canMove = false;
 
         MessageUI.Show(escapeText, endDelay);
-        onEscape?.Invoke();
-
         yield return new WaitForSeconds(endDelay);
 
         Cursor.lockState = CursorLockMode.None;
