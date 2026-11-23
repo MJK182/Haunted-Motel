@@ -8,12 +8,13 @@ public class EscapeExit : MonoBehaviour, IInteractable
 {
     public string exitName = "Pääovi";
     public string[] requiredItems;
+    public bool requiresPower = true;           // vaatii generaattorin käynnissä
     public bool consumeItems = false;
     public string lockedHint = "Ovi on lukossa.";
     public string escapeText = "Pääsit pakoon!";
-    public string endSceneName = "";    // tyhjä = lataa nykyinen scene uudelleen
+    public string endSceneName = "";            // tyhjä = lataa nykyinen scene uudelleen
     public float endDelay = 4f;
-    public UnityEvent onEscape;         // esim. elokuva tai ääni
+    public UnityEvent onEscape;                 // esim. elokuva tai ääni
 
     bool done;
     public string Prompt => exitName;
@@ -21,6 +22,12 @@ public class EscapeExit : MonoBehaviour, IInteractable
     public void Interact(Inventory inv)
     {
         if (done) return;
+
+        if (requiresPower && !Generator.PowerOn)
+        {
+            MessageUI.Show("Sähköt ovat pois päältä. Käynnistä generaattori.");
+            return;
+        }
 
         var missing = requiredItems.Where(i => !inv.Has(i)).ToList();
         if (missing.Count > 0)
