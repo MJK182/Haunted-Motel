@@ -3072,6 +3072,143 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 870986310}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &872408684
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 872408685}
+  - component: {fileID: 872408688}
+  - component: {fileID: 872408687}
+  - component: {fileID: 872408686}
+  m_Layer: 0
+  m_Name: EndCam_Basement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &872408685
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872408684}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.105846904, y: 0.12293252, z: -0.012721237, w: 0.9866723}
+  m_LocalPosition: {x: -3.1669292, y: 2.7986732, z: -12.506483}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1499361089}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &872408686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872408684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
+--- !u!81 &872408687
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872408684}
+  m_Enabled: 0
+--- !u!20 &872408688
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872408684}
+  m_Enabled: 0
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!1 &874141165
 GameObject:
   m_ObjectHideFlags: 0
@@ -3528,6 +3665,7 @@ MonoBehaviour:
   consumeItems: 0
   lockedHint: Ovi on lukossa.
   escapeText: "P\xE4\xE4sit pakoon!"
+  ending: {fileID: 0}
   endSceneName: Ending_Main
   endDelay: 4
   onEscape:
@@ -5001,6 +5139,38 @@ Transform:
   - {fileID: 438049689}
   m_Father: {fileID: 1590022070}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1499361088
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1499361089}
+  m_Layer: 0
+  m_Name: Kamerat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1499361089
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499361088}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -11.31882, y: 2.45571, z: -2.0417}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 872408685}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1515096562
 GameObject:
   m_ObjectHideFlags: 0
@@ -5350,6 +5520,7 @@ GameObject:
   - component: {fileID: 1566820657}
   - component: {fileID: 1566820656}
   - component: {fileID: 1566820660}
+  - component: {fileID: 1566820661}
   m_Layer: 0
   m_Name: Exit_kellari
   m_TagString: Untagged
@@ -5469,11 +5640,44 @@ MonoBehaviour:
   consumeItems: 0
   lockedHint: Luukku on kiinni ruuveilla
   escapeText: "P\xE4\xE4sit pakoon kellarin kautta!"
+  ending: {fileID: 0}
   endSceneName: Ending_Basement
   endDelay: 4
   onEscape:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1566820661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566820655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 268fa082335a263458ce024c051c084e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndingSequence
+  title: "P\xE4\xE4sit pakoon!"
+  lines:
+  - "Ruuvit irtosivat yksi kerrallaan, ja kylm\xE4 y\xF6ilma tulvi sis\xE4\xE4n."
+  - "Ry\xF6mit ulos pime\xE4\xE4n mets\xE4\xE4n, ja motellin valot j\xE4iv\xE4t taaksesi."
+  - "Jossain kaukana jokin kaivoi kynsill\xE4\xE4n maata."
+  - Et uskaltanut katsoa taakse.
+  lineTime: 4
+  titleColor: {r: 1, g: 1, b: 1, a: 1}
+  cameraTarget: {fileID: 872408685}
+  cameraMoveTime: 3
+  fadeColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeDelay: 1.5
+  fadeTime: 2.5
+  flashLight: {fileID: 0}
+  flashIntensity: 8
+  sound: {fileID: 0}
+  enableOnStart: []
+  disableOnStart: []
+  gameScene: Game
+  menuScene: MainMenu
 --- !u!1 &1590022069
 GameObject:
   m_ObjectHideFlags: 0
@@ -7767,3 +7971,4 @@ SceneRoots:
   - {fileID: 1814880197}
   - {fileID: 954804227}
   - {fileID: 1566820659}
+  - {fileID: 1499361089}
