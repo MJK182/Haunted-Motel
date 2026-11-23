@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class EnemyAI : MonoBehaviour
+public class ZombieAI : MonoBehaviour
 {
     private enum State { Patrol, Chase, Search }
 
