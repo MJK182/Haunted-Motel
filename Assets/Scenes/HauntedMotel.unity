@@ -6292,8 +6292,8 @@ Transform:
   m_GameObject: {fileID: 1239150468}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -60.3, y: 9, z: -6.1}
-  m_LocalScale: {x: 29.568111, y: 0.21897, z: 42.55175}
+  m_LocalPosition: {x: -60.3, y: 9, z: -8}
+  m_LocalScale: {x: 32.734123, y: 0.21897, z: 42.55175}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1996409766}
@@ -7864,11 +7864,11 @@ MonoBehaviour:
   waitAtWaypoint: 1
   eyes: {fileID: 0}
   sightRange: 15
-  fieldOfView: 90
+  fieldOfView: 180
   patrolSpeed: 6
   chaseSpeed: 7
-  loseSightTime: 4
-  catchDistance: 0.5
+  loseSightTime: 2
+  catchDistance: 1.5
   debugLogs: 1
 --- !u!195 &1624303975
 NavMeshAgent:
