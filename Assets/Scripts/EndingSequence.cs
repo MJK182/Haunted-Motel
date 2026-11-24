@@ -163,8 +163,8 @@ public class EndingSequence : MonoBehaviour
         {
             GUI.color = Color.white;
             float w = 260f, h = 46f, x = Screen.width / 2f - w / 2f, y = Screen.height * 0.72f;
-            if (GUI.Button(new Rect(x, y, w, h), "Pelaa uudelleen")) SceneManager.LoadScene(gameScene);
-            if (GUI.Button(new Rect(x, y + h + 12f, w, h), "Päävalikko")) SceneManager.LoadScene(menuScene);
+            if (GUI.Button(new Rect(x, y, w, h), "Paina alempaa")) SceneManager.LoadScene(gameScene);
+            if (GUI.Button(new Rect(x, y + h + 12f, w, h), "Huijaus")) SceneManager.LoadScene(menuScene);
         }
     }
 }
