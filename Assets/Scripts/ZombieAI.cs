@@ -12,17 +12,19 @@ public class ZombieAI : MonoBehaviour
     [SerializeField] private float waitAtWaypoint = 2f;
 
     [Header("Näkö")]
-    [SerializeField] private Transform eyes;            // valinnainen, esim. pään kohta
+    [SerializeField] private Transform eyes;
     [SerializeField] private float sightRange = 15f;
     [SerializeField] [Range(10f, 360f)] private float fieldOfView = 90f;
+    [SerializeField] private float lostSightGrace = 0.5f;   // sekuntia, ennen kuin näön menetys lasketaan
 
     [Header("Nopeudet")]
     [SerializeField] private float patrolSpeed = 2f;
     [SerializeField] private float chaseSpeed = 5f;
 
     [Header("Muut")]
-    [SerializeField] private float loseSightTime = 4f;  // kauanko etsii, ennen kuin palaa kiertämään
-    [SerializeField] private float catchDistance = 1.2f;
+    [SerializeField] private float loseSightTime = 2f;
+    [SerializeField] private float catchDistance = 1.5f;
+    [SerializeField] private bool returnToStartOnCatch = true;
 
     [Header("Debug")]
     [SerializeField] private bool debugLogs = true;
@@ -35,6 +37,7 @@ public class ZombieAI : MonoBehaviour
     private int waypointIndex;
     private float waitTimer;
     private float searchTimer;
+    private float timeSinceSeen = 999f;
     private Vector3 lastKnownPosition;
     private Vector3 enemyStartPosition;
     private Quaternion enemyStartRotation;
@@ -47,11 +50,23 @@ public class ZombieAI : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        playerRespawn = player.GetComponent<PlayerRespawn>();
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj == null)
+        {
+            Debug.LogError("Pelaajaa ei löytynyt: lisää Player-objektille tagi 'Player'.");
+            enabled = false;
+            return;
+        }
+        player = playerObj.transform;
 
+        // Etsi PlayerRespawn objektista, sen vanhemmista tai lapsista
+        playerRespawn = player.GetComponentInParent<PlayerRespawn>();
         if (playerRespawn == null)
-            Debug.LogWarning("Player-objektilta puuttuu PlayerRespawn-skripti!");
+            playerRespawn = player.GetComponentInChildren<PlayerRespawn>();
+        if (playerRespawn == null)
+            Debug.LogError("PlayerRespawn-skriptiä ei löytynyt Player-objektista (" + player.name + ")!");
+
+        catchDistance = Mathf.Max(catchDistance, agent.stoppingDistance + 0.5f);
 
         enemyStartPosition = transform.position;
         enemyStartRotation = transform.rotation;
@@ -62,6 +77,8 @@ public class ZombieAI : MonoBehaviour
     void Update()
     {
         bool canSee = CanSeePlayer();
+        if (canSee) timeSinceSeen = 0f;
+        else timeSinceSeen += Time.deltaTime;
 
         switch (state)
         {
@@ -81,18 +98,19 @@ public class ZombieAI : MonoBehaviour
                 if (canSee)
                 {
                     lastKnownPosition = player.position;
-                    agent.SetDestination(player.position);
+                    MoveTo(player.position);
 
-                    if (Vector3.Distance(transform.position, player.position) <= catchDistance)
+                    Vector3 flat = player.position - transform.position;
+                    flat.y = 0f;
+                    if (flat.magnitude <= catchDistance)
                         CaughtPlayer();
                 }
-                else
+                else if (timeSinceSeen > lostSightGrace)
                 {
-                    // Pelaaja katosi näkyvistä: mene viimeiseen tunnettuun paikkaan
                     if (debugLogs) Debug.Log("Pelaaja kadotettu, etsitään");
                     state = State.Search;
                     searchTimer = loseSightTime;
-                    agent.SetDestination(lastKnownPosition);
+                    MoveTo(lastKnownPosition);
                 }
                 break;
 
@@ -104,9 +122,11 @@ public class ZombieAI : MonoBehaviour
                     break;
                 }
 
-                if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+                if (HasArrived())
                 {
                     searchTimer -= Time.deltaTime;
+                    transform.Rotate(0f, 90f * Time.deltaTime, 0f); // katselee ympärilleen
+
                     if (searchTimer <= 0f)
                     {
                         if (debugLogs) Debug.Log("Palataan kiertämään");
@@ -118,11 +138,30 @@ public class ZombieAI : MonoBehaviour
         }
     }
 
+    private bool HasArrived()
+    {
+        if (agent.pathPending) return false;
+        if (agent.pathStatus == NavMeshPathStatus.PathInvalid) return true;
+        return agent.remainingDistance <= agent.stoppingDistance + 0.1f;
+    }
+
+    private bool MoveTo(Vector3 target)
+    {
+        if (NavMesh.SamplePosition(target, out NavMeshHit navHit, 3f, NavMesh.AllAreas))
+        {
+            agent.SetDestination(navHit.position);
+            return true;
+        }
+
+        if (debugLogs) Debug.Log("Kohde ei ole NavMeshillä: " + target);
+        return false;
+    }
+
     private void Patrol()
     {
         if (waypoints == null || waypoints.Length == 0) return;
 
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        if (HasArrived())
         {
             waitTimer += Time.deltaTime;
             if (waitTimer >= waitAtWaypoint)
@@ -137,7 +176,7 @@ public class ZombieAI : MonoBehaviour
     {
         if (waypoints == null || waypoints.Length == 0) return;
         waitTimer = 0f;
-        agent.SetDestination(waypoints[waypointIndex].position);
+        MoveTo(waypoints[waypointIndex].position);
     }
 
     private bool CanSeePlayer()
@@ -154,27 +193,18 @@ public class ZombieAI : MonoBehaviour
         float angle = Vector3.Angle(eyes.forward, toPlayer);
         if (angle > fieldOfView * 0.5f) return false;
 
-        // Kaikki osumat säteen matkalla, lähimmästä kaukaisimpaan
         RaycastHit[] hits = Physics.RaycastAll(
             eyes.position, toPlayer.normalized, distance + 0.5f,
             ~0, QueryTriggerInteraction.Ignore);
 
         foreach (RaycastHit hit in hits.OrderBy(h => h.distance))
         {
-            // Ohita vihollisen omat colliderit
             if (hit.transform == transform || hit.transform.IsChildOf(transform))
                 continue;
 
-            bool isPlayer = hit.transform == player || hit.transform.IsChildOf(player);
-
-            if (!isPlayer && debugLogs)
-                Debug.Log($"Näkyvyyden estää: {hit.collider.name}");
-
-            return isPlayer;
+            return hit.transform == player || hit.transform.IsChildOf(player);
         }
 
-        if (debugLogs)
-            Debug.Log("Raycast ei osunut pelaajaan (onko pelaajalla collider?)");
         return false;
     }
 
@@ -184,12 +214,20 @@ public class ZombieAI : MonoBehaviour
 
         if (playerRespawn != null)
             playerRespawn.Respawn();
+        else
+            Debug.LogError("Respawn ei onnistu: PlayerRespawn puuttuu!");
 
-        // Vihollinen palaa alkupisteeseensä ja jatkaa kiertämistä
-        agent.Warp(enemyStartPosition);
-        transform.rotation = enemyStartRotation;
+        if (returnToStartOnCatch)
+        {
+            if (!agent.Warp(enemyStartPosition))
+                transform.position = enemyStartPosition;
+            transform.rotation = enemyStartRotation;
+        }
+
+        agent.ResetPath();
         state = State.Patrol;
         waypointIndex = 0;
+        timeSinceSeen = 999f;
         GoToWaypoint();
     }
 
